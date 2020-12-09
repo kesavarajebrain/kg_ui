@@ -1,0 +1,33 @@
+
+  .login-bg{
+    height: 100vh;
+    width: 100%;
+    background: url(https://40obml2t8u691fd442y9pg71-wpengine.netdna-ssl.com/wp-content/uploads/login-page-bg.jpg) no-repeat center center fixed; 
+    background-color: white;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+
+  .mat-form-field {
+    width: 100%;
+    min-width: 300px;
+  }
+
+  mat-card-title,
+  mat-card-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .error {
+    padding: 16px;
+    width: 300px;
+    color: white;
+    background-color: red;
+  }
+
+  .button {
+    display: flex;
+    justify-content: flex-end;
+  }
