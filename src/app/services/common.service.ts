@@ -12,4 +12,12 @@ export class CommonService {
   registerEmployee(data) {
     return this.http.post<any>(this.BaseUrl + 'registerEmployee', data);
   }
+
+  getEmployees(){
+    return this.http.get<any>(this.BaseUrl + 'getEmployees');
+  }
+
+  saveSlot(data){
+    return this.http.post<any>(this.BaseUrl + 'saveSlot', data);
+  }
 }

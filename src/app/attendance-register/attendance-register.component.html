@@ -8,9 +8,10 @@
                 </p>
             </div>
             <div class="col-md-8" style="margin-top: 10rem;">
-              
+
                 <mat-card>
-                    <mat-card-title class="text-center" style="font-size: 18px;">Employee Slot Allocation</mat-card-title>
+                    <mat-card-title class="text-center" style="font-size: 18px;">Employee Slot Allocation
+                    </mat-card-title>
                     <mat-card-content>
                         <form #employeeaddForm="ngForm">
                             <div class="row">
@@ -18,31 +19,109 @@
                                     <p>
                                         <mat-form-field appearance="outline" class="example-full-width">
                                             <mat-label>Employee Name</mat-label>
-                                            <mat-select  required
-                                            #empName="ngModel" name="empName" [(ngModel)]="employeeData.empName">
-                                            <mat-option value="Female">Female</mat-option>
-                                            <mat-option value="Male">Male</mat-option>
-                                          </mat-select>
+                                            <mat-select required #empId="ngModel" name="empId"
+                                                [(ngModel)]="employeeData.empId">
+                                                <mat-option *ngFor="let emp of employeeNamesArray" [value]="emp._id">
+                                                    {{emp.empName | uppercase }}</mat-option>
+                                            </mat-select>
                                         </mat-form-field>
                                     </p>
                                 </div>
-                                <div class="col-md-6">
-                                    <p>
-                                        <mat-form-field appearance="outline" class="example-full-width" >
-                                            <mat-label>Start Date & Time</mat-label>
-                                            <input matInput  id="from" readonly 
-                                            #startDate="ngModel" name="startDate" ngModel [(ngModel)]="employeeData.startDate">
-                                        </mat-form-field>
-                                    </p>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p>
+                                                <mat-form-field appearance="outline" class="example-full-width">
+                                                    <mat-label>Start Date</mat-label>
+                                                        <input matInput [matDatepicker]="picker" required readonly
+                                                        #startDate="ngModel" [min]="today" name="startDate" [(ngModel)]="employeeData.startDate">
+                                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                        <mat-datepicker #picker></mat-datepicker>
+                                                </mat-form-field>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <mat-form-field appearance="outline" class="example-full-width">
+                                            <mat-label>Start Time</mat-label>
+                                            <mat-select required #startTime="ngModel" name="startTime"
+                                                [(ngModel)]="employeeData.startTime">
+                                                <mat-option  value="" disabled selected>-- HH --</mat-option>
+                                                <mat-option value="01AM">01 :00 AM</mat-option>
+                                                <mat-option value="02AM">02 :00 AM</mat-option>
+                                                <mat-option value="03AM">03 :00 AM</mat-option>
+                                                <mat-option value="04AM">04 :00 AM</mat-option>
+                                                <mat-option value="05AM">05 :00 AM</mat-option>
+                                                <mat-option value="06AM">06 :00 AM</mat-option>
+                                                <mat-option value="07AM">07 :00 AM</mat-option>
+                                                <mat-option value="08AM">08 :00 AM</mat-option>
+                                                <mat-option value="09AM">09 :00 AM</mat-option>
+                                                <mat-option value="10AM">10 :00 AM</mat-option>
+                                                <mat-option value="11AM">11 :00 AM</mat-option>
+                                                <mat-option value="12PM">12 :00 PM</mat-option>
+                                                <mat-option value="01PM">01 :00 PM</mat-option>
+                                                <mat-option value="02PM">02 :00 PM</mat-option>
+                                                <mat-option value="03PM">03 :00 PM</mat-option>
+                                                <mat-option value="04PM">04 :00 PM</mat-option>
+                                                <mat-option value="05PM">05 :00 PM</mat-option>
+                                                <mat-option value="06PM">06 :00 PM</mat-option>
+                                                <mat-option value="07PM">07 :00 PM</mat-option>
+                                                <mat-option value="08PM">08 :00 PM</mat-option>
+                                                <mat-option value="09PM">09 :00 PM</mat-option>
+                                                <mat-option value="10PM">10 :00 PM</mat-option>
+                                                <mat-option value="11PM">11 :00 PM</mat-option>
+                                                <mat-option value="12AM">12 :00 AM</mat-option>
+                                            </mat-select>
+                                            </mat-form-field>
+                                        </div>    
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <p>
-                                        <mat-form-field appearance="outline" class="example-full-width" >
-                                            <mat-label>End Date & Time</mat-label>
-                                            <input matInput  id="to" readonly
-                                            #endDate="ngModel" name="endDate" ngModel [(ngModel)]="employeeData.endDate">
-                                        </mat-form-field>
-                                    </p>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p>
+                                                <mat-form-field appearance="outline" class="example-full-width">
+                                                    <mat-label>End Date</mat-label>
+                                                        <input matInput [matDatepicker]="picker1" required readonly
+                                                        #endDate="ngModel" [min]="today" name="endDate" [(ngModel)]="employeeData.endDate">
+                                                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                                        <mat-datepicker #picker1></mat-datepicker>
+                                                </mat-form-field>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <mat-form-field appearance="outline" class="example-full-width">
+                                            <mat-label>End Time</mat-label>
+                                            <mat-select required #endTime="ngModel" name="endTime"
+                                                [(ngModel)]="employeeData.endTime">
+                                                <mat-option value="" disabled selected>-- HH --</mat-option>
+                                                <mat-option value="01AM">01 :00 AM</mat-option>
+                                                <mat-option value="02AM">02 :00 AM</mat-option>
+                                                <mat-option value="03AM">03 :00 AM</mat-option>
+                                                <mat-option value="04AM">04 :00 AM</mat-option>
+                                                <mat-option value="05AM">05 :00 AM</mat-option>
+                                                <mat-option value="06AM">06 :00 AM</mat-option>
+                                                <mat-option value="07AM">07 :00 AM</mat-option>
+                                                <mat-option value="08AM">08 :00 AM</mat-option>
+                                                <mat-option value="09AM">09 :00 AM</mat-option>
+                                                <mat-option value="10AM">10 :00 AM</mat-option>
+                                                <mat-option value="11AM">11 :00 AM</mat-option>
+                                                <mat-option value="12PM">12 :00 PM</mat-option>
+                                                <mat-option value="01PM">01 :00 PM</mat-option>
+                                                <mat-option value="02PM">02 :00 PM</mat-option>
+                                                <mat-option value="03PM">03 :00 PM</mat-option>
+                                                <mat-option value="04PM">04 :00 PM</mat-option>
+                                                <mat-option value="05PM">05 :00 PM</mat-option>
+                                                <mat-option value="06PM">06 :00 PM</mat-option>
+                                                <mat-option value="07PM">07 :00 PM</mat-option>
+                                                <mat-option value="08PM">08 :00 PM</mat-option>
+                                                <mat-option value="09PM">09 :00 PM</mat-option>
+                                                <mat-option value="10PM">10 :00 PM</mat-option>
+                                                <mat-option value="11PM">11 :00 PM</mat-option>
+                                                <mat-option value="12AM">12 :00 AM</mat-option>
+                                            </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <p class="text-center">

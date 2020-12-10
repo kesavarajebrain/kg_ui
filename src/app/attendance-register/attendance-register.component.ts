@@ -11,52 +11,65 @@ declare var $:any;
   templateUrl: './attendance-register.component.html',
   styleUrls: ['./attendance-register.component.css']
 })
-export class AttendanceRegisterComponent implements AfterViewInit {
+export class AttendanceRegisterComponent implements OnInit {
   @ViewChild('employeeaddForm', { static: false }) employeeaddForm: NgForm;
   public employeeData = {startDate:"",endDate:"",empName:""}
   fromDate:any;
   toDate:any;
   finalTodate:any;
   test:any
+  employeeNamesArray: any =[];
+  today: Date;
   constructor(private _snackBar: MatSnackBar, private common_service: CommonService, private route: Router) { }
   ngOnInit() {
-
-  }
-
-  ngAfterViewInit(){
-    var today = new Date();
-    $('#from').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii',
-        autoclose: true,
-        todayBtn: true,
-        // startDate : today
-    }).on('changeDate', function(ev2){
-        $('#to').datetimepicker('setStartDate', ev2.date);
-       this.fromDate = ev2.date
-       console.log(this.fromDate)
-    });
-    
-    $('#to').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii',
-        autoclose: true,
-        todayBtn: true,
-        // startDate : today
-    }).on('changeDate', function(ev1){
-        $('#from').datetimepicker('setEndDate', ev1.date);
-        this.toDate = ev1.date
-        console.log(this.toDate)
-        this.finalTodate = this.toDate
-        console.log(this.finalTodate)
-      });
+    this.getAllEmployee();
+    this.today = new Date()
   }
 
   saveSlot(){
-    console.log(this.finalTodate)
-    this.employeeData.startDate = this.fromDate
-    this.employeeData.endDate = this.toDate
+  if(this.employeeaddForm.invalid){
+    this._snackBar.open('Please fill all the fields!', '', {
+      duration: 2000,
+      verticalPosition: 'top'
+    });
+  }else{
     console.log(this.employeeData)
-    console.log(this.fromDate)
-    console.log(this.toDate)
+    this.common_service.saveSlot(this.employeeData).subscribe(data => {
+      if (data.statusCode == 200) {
+        Swal.fire(
+          'Done!',
+          data.msg,
+          'success'
+        )
+        this.route.navigateByUrl('/dashboard', { skipLocationChange: true });
+        setTimeout(() => this.route.navigate(['/attendance']), 100);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text:data.msg,
+        })
+      }
+      err => {
+        console.log(err)
+      }
+    });
+  }
   }
 
+  getAllEmployee(){
+    this.common_service.getEmployees().subscribe(data => {
+      if (data.statusCode == 200) {
+        for (let index = 0; index < data.data.length; index++) {
+          this.employeeNamesArray.push(data.data[index]._id)
+        }
+
+      } else {
+       console.log(data.msg)
+      }
+      err => {
+        console.log(err)
+      }
+    });
+  }
 }
