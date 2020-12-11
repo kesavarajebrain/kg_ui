@@ -3,7 +3,8 @@ import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonService } from '../services/common.service';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -13,7 +14,8 @@ export class DashboardComponent implements OnInit {
   @ViewChild('employeeaddForm', { static: false }) employeeaddForm: NgForm;
   public employeeData: any = {}
 
-  constructor(private _snackBar: MatSnackBar, private common_service: CommonService,private route:Router) { }
+  constructor(private spinner: NgxSpinnerService
+,    private _snackBar: MatSnackBar, private common_service: CommonService,private route:Router) { }
 
   ngOnInit() {
   }
@@ -25,10 +27,10 @@ export class DashboardComponent implements OnInit {
         verticalPosition: 'top'
       });
     } else {
-      console.log(this.employeeData)
+      this.spinner.show();
       this.common_service.registerEmployee(this.employeeData).subscribe(data => {
-        console.log(data)
         if (data.statusCode == 200) {
+          this.spinner.hide();
           Swal.fire(
             'Done!',
             data.msg,
@@ -37,6 +39,7 @@ export class DashboardComponent implements OnInit {
           this.route.navigateByUrl('/login', { skipLocationChange: true });
           setTimeout(() => this.route.navigate(['/dashboard']), 100);
         } else {
+          this.spinner.hide();
           Swal.fire({
             icon: 'error',
             title: 'Oops...',

@@ -11,6 +11,9 @@ import { TopnavComponent } from './topnav/topnav.component';
 import { HttpClientModule} from '@angular/common/http';
 import { AttendanceRegisterComponent } from './attendance-register/attendance-register.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerService } from "ngx-spinner";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +24,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
   ],
   imports: [
     BrowserModule,
+    NgxSpinnerModule,
     NgxMaterialTimepickerModule,
     HttpClientModule,
     FormsModule,
@@ -29,7 +33,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
     AngularMaterialModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [NgxSpinnerService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

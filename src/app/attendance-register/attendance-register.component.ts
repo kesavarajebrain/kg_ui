@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import Swal from 'sweetalert2'
 declare var $:any;
+import { NgxSpinnerService } from "ngx-spinner";
+import { Spinner } from 'ngx-spinner/lib/ngx-spinner.enum';
+
 @Component({
   selector: 'app-attendance-register',
   templateUrl: './attendance-register.component.html',
@@ -20,7 +23,7 @@ export class AttendanceRegisterComponent implements OnInit {
   test:any
   employeeNamesArray: any =[];
   today: Date;
-  constructor(private _snackBar: MatSnackBar, private common_service: CommonService, private route: Router) { }
+  constructor(private _snackBar: MatSnackBar, private common_service: CommonService, private route: Router,private spinner:NgxSpinnerService) { }
   ngOnInit() {
     this.getAllEmployee();
     this.today = new Date()
@@ -33,9 +36,10 @@ export class AttendanceRegisterComponent implements OnInit {
       verticalPosition: 'top'
     });
   }else{
-    console.log(this.employeeData)
+    this.spinner.show();
     this.common_service.saveSlot(this.employeeData).subscribe(data => {
       if (data.statusCode == 200) {
+        this.spinner.hide();
         Swal.fire(
           'Done!',
           data.msg,
@@ -44,6 +48,7 @@ export class AttendanceRegisterComponent implements OnInit {
         this.route.navigateByUrl('/dashboard', { skipLocationChange: true });
         setTimeout(() => this.route.navigate(['/attendance']), 100);
       } else {
+        this.spinner.hide();
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -58,8 +63,10 @@ export class AttendanceRegisterComponent implements OnInit {
   }
 
   getAllEmployee(){
+    this.spinner.show()
     this.common_service.getEmployees().subscribe(data => {
       if (data.statusCode == 200) {
+        this.spinner.hide();
         for (let index = 0; index < data.data.length; index++) {
           this.employeeNamesArray.push(data.data[index]._id)
         }
