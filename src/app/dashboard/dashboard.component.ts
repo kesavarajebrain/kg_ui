@@ -204,6 +204,7 @@ export class DashboardComponent implements OnInit {
             title: 'Oops...',
             text: data.msg,
           })
+          
         }
         err => {
           console.log(err)
