@@ -23,7 +23,13 @@ export class LoginComponent implements OnInit {
         verticalPosition: 'top'
       });
     }else{
-      if(this.loginData.userName == 'admin' && this.loginData.userPassword == 'admin'){
+      if(this.loginData.userName == 'doctor' && this.loginData.userPassword == 'doctor'){
+        var Role = "Doctor"
+        localStorage.setItem('role',Role)
+        this.route.navigate(['/dashboard'])
+      }else if(this.loginData.userName == 'patient' && this.loginData.userPassword == 'patient'){
+        var Role = "Patient"
+        localStorage.setItem('role',Role)
         this.route.navigate(['/dashboard'])
       }else{
         this._snackBar.open('Invalid Credentials', '', {

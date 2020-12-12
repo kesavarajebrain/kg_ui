@@ -13,6 +13,7 @@ import { AttendanceRegisterComponent } from './attendance-register/attendance-re
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { NgxSpinnerService } from "ngx-spinner";
+import { TabularViewComponent } from './tabular-view/tabular-view.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { NgxSpinnerService } from "ngx-spinner";
     LoginComponent,
     DashboardComponent,
     TopnavComponent,
-    AttendanceRegisterComponent
+    AttendanceRegisterComponent,
+    TabularViewComponent
   ],
   imports: [
     BrowserModule,

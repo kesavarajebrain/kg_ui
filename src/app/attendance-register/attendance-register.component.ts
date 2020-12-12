@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild,AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonService } from '../services/common.service';
 import { Router } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import Swal from 'sweetalert2'
-declare var $:any;
+declare var $: any;
 import { NgxSpinnerService } from "ngx-spinner";
 import { Spinner } from 'ngx-spinner/lib/ngx-spinner.enum';
 
@@ -15,44 +15,55 @@ import { Spinner } from 'ngx-spinner/lib/ngx-spinner.enum';
   styleUrls: ['./attendance-register.component.css']
 })
 export class AttendanceRegisterComponent implements OnInit {
-  @ViewChild('employeeaddForm', { static: false }) employeeaddForm: NgForm;
-  public employeeData = {startDate:"",endDate:"",empName:""}
-  fromDate:any;
-  toDate:any;
-  finalTodate:any;
-  test:any
-  employeeNamesArray: any =[];
+  @ViewChild('slotSearchForm', { static: false }) slotSearchForm: NgForm;
+  public employeeData = { startDate: "", endDate: "", empName: "" }
+  fromDate: any;
+  toDate: any;
+  finalTodate: any;
+  test: any
+  employeeNamesArray: any = [];
   today: Date;
-  constructor(private _snackBar: MatSnackBar, private common_service: CommonService, private route: Router,private spinner:NgxSpinnerService) { }
+  public searchData: any = {}
+  appointmentsArray: any = [];
+  slotDaten: any;
+  appointmentsCount: any;
+  availableCount: any;
+  bookedCount: any;
+  noSlotsMsg: string;
+  constructor(private _snackBar: MatSnackBar, private common_service: CommonService, private route: Router, private spinner: NgxSpinnerService) { }
   ngOnInit() {
-    this.getAllEmployee();
-    this.today = new Date()
+    this.today = new Date();
+    this.searchDefault()
   }
 
-  saveSlot(){
-  if(this.employeeaddForm.invalid){
-    this._snackBar.open('Please fill all the fields!', '', {
-      duration: 2000,
-      verticalPosition: 'top'
-    });
-  }else{
+  searchDefault() {
     this.spinner.show();
-    this.common_service.saveSlot(this.employeeData).subscribe(data => {
+    const date = new Date(this.today);
+    this.searchData.slotDate = date.toLocaleString().split(',')[0];
+    this.common_service.searchSlot(this.searchData).subscribe(data => {
       if (data.statusCode == 200) {
-        this.spinner.hide();
-        Swal.fire(
-          'Done!',
-          data.msg,
-          'success'
-        )
-        this.route.navigateByUrl('/dashboard', { skipLocationChange: true });
-        setTimeout(() => this.route.navigate(['/attendance']), 100);
+        if(data.data.length ==0){
+          this.spinner.hide();
+          this.slotDaten = this.searchData.slotDate.slice(0, 10);
+          this.availableCount = '0'
+          this.bookedCount = '0'
+          this.appointmentsArray = []
+          this.noSlotsMsg = "There is no appointments available!"
+
+        }else{
+          this.spinner.hide();
+          this.noSlotsMsg = ""
+          this.appointmentsArray = data.data
+          this.slotDaten = data.data[0].slotDate.slice(0, 10);
+         this.availableCount = this.appointmentsArray.filter(x => x.appointment == 'Available').length;
+         this.bookedCount = this.appointmentsArray.filter(y => y.appointment == 'Booked').length;
+        }
       } else {
         this.spinner.hide();
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text:data.msg,
+          text: data.msg,
         })
       }
       err => {
@@ -60,23 +71,48 @@ export class AttendanceRegisterComponent implements OnInit {
       }
     });
   }
-  }
 
-  getAllEmployee(){
-    this.spinner.show()
-    this.common_service.getEmployees().subscribe(data => {
-      if (data.statusCode == 200) {
-        this.spinner.hide();
-        for (let index = 0; index < data.data.length; index++) {
-          this.employeeNamesArray.push(data.data[index]._id)
+  searchAppointments() {
+    if (this.slotSearchForm.invalid) {
+      this._snackBar.open('Please Choose Date!', '', {
+        duration: 2000,
+        verticalPosition: 'top'
+      });
+    } else {
+      this.spinner.show();
+      const date1 = new Date(this.searchData.slotDate);
+      this.searchData.slotDate = date1.toLocaleString().split(',')[0];
+      this.common_service.searchSlot(this.searchData).subscribe(data => {
+        if (data.statusCode == 200) {
+          if(data.data.length ==0){
+            this.spinner.hide();
+            this.slotDaten = this.searchData.slotDate.slice(0, 10);
+            this.availableCount = '0'
+            this.bookedCount = '0'
+            this.appointmentsArray = []
+            this.noSlotsMsg = "There is no appointments available!"
+
+          }else{
+            this.spinner.hide();
+            this.noSlotsMsg = ""
+            this.appointmentsArray = data.data
+            this.slotDaten = data.data[0].slotDate.slice(0, 10);
+           this.availableCount = this.appointmentsArray.filter(x => x.appointment == 'Available').length;
+           this.bookedCount = this.appointmentsArray.filter(y => y.appointment == 'Booked').length;
+          }
+         
+        } else {
+          this.spinner.hide();
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: data.msg,
+          })
         }
-
-      } else {
-       console.log(data.msg)
-      }
-      err => {
-        console.log(err)
-      }
-    });
+        err => {
+          console.log(err)
+        }
+      });
+    }
   }
 }

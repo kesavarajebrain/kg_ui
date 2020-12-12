@@ -7,22 +7,6 @@
     background-repeat: no-repeat;
     position: relative;
   }
-
-  .example-full-width {
+  table {
     width: 100%;
-  }
-
-  .timeSlots{
-    font-weight: bold;
-    font-size: 11px;
-    margin-top: -1rem !important;
-  }
-  .available{
-    color: green;
-    font-size: 13px;
-  }
-
-  .booked{
-    color: red;
-    font-size: 13px;
   }

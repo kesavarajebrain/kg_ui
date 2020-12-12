@@ -12,4 +12,8 @@ export class TopnavComponent implements OnInit {
   ngOnInit() {
   }
 
+  logout(){
+    localStorage.removeItem('role')
+  }
+
 }
